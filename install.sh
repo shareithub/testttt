@@ -9,8 +9,6 @@ CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-# Define the secret key (should be kept secret)
-# SECRET_KEY="beny"
 EXPIRY_DATE="2025-03-31"  # Set the expiration date (YYYY-MM-DD)
 
 # Get current date
@@ -26,11 +24,7 @@ fi
 expiry_seconds=$(date -d "$EXPIRY_DATE" +%s)
 current_seconds=$(date +%s)
 remaining_seconds=$((expiry_seconds - current_seconds))
-
-# Convert remaining seconds to days
 remaining_days=$((remaining_seconds / 86400))
-
-# Bagian perintah untuk input dan pemeriksaan key telah dihapus
 
 # Menampilkan informasi server
 echo -e "${MAGENTA} ┌────────────────────────────────────────────────────────────────────────────────────────┐ ${NC}"
@@ -55,10 +49,8 @@ echo -e "${RED} │${NC} ${CYAN}5) Windows Server 10${NC}                       
 echo -e "${RED} │${NC} ${CYAN}6) Windows Server 11${NC}                              ${RED}│ ${NC}"
 echo -e "${RED} └────────────────────────────────────────────────┘ ${NC}"
 
-# Get user input for Windows version
 read -p "Pilih (1-6): " pilihan
 
-# URLs for the different Windows versions
 case $pilihan in
     1)
         PILIHOS="https://sourceforge.net/projects/nixpoin/files/windows2012.gz"
@@ -90,27 +82,22 @@ case $pilihan in
         ;;
 esac
 
-# Ask for password after selecting the Windows version
 echo -e "${CYAN}Apakah Anda ingin mengatur kata sandi untuk akun Administrator?${NC}"
 echo -e "${CYAN}1) Ya, saya ingin mengatur kata sandi saya sendiri${NC}"
 echo -e "${CYAN}2) Tidak, gunakan kata sandi default${NC}"
 read -p "Pilih (1-2): " set_password
 
 if [ "$set_password" -eq 1 ]; then
-    # Prompt for the password if user selects option 1
     read -sp "Masukkan kata sandi untuk akun Administrator: " PASSWORD
     echo
 else
-    # Set a default password if user selects option 2
     PASSWORD="Nixpoin.com123!"
     echo -e "${CYAN}Menggunakan kata sandi default: $PASSWORD${NC}"
 fi
 
-# Mengambil IP dan Gateway
 IP4=$(curl -4 -s icanhazip.com)
 GW=$(ip route | awk '/default/ { print $3 }')
 
-# Membuat net.bat untuk settingan IP dan DNS otomatis
 cat >/tmp/net.bat<<EOF
 @ECHO OFF
 cd.>%windir%\GetAdmin
@@ -130,18 +117,15 @@ del /f /q net.bat
 exit
 EOF
 
-# Download dan install image OS
 echo "Mendownload file $PILIHOS..."
 wget --no-check-certificate -O- $PILIHOS | gunzip | dd of=/dev/vda bs=3M status=progress
 
-# Mount dan copy file setup
 mount.ntfs-3g /dev/vda2 /mnt
 cd "/mnt/ProgramData/Microsoft/Windows/Start Menu/Programs/"
 cd Start* || cd start*; \
 wget https://nixpoin.com/ChromeSetup.exe
 cp -f /tmp/net.bat net.bat
 
-# Shutdown
-echo -e "${RED}Your server will turn off in 3 seconds...${RESET}"
+echo -e "${RED}Your server will turn off in 3 seconds...${NC}"
 sleep 3
 poweroff
