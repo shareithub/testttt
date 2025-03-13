@@ -10,7 +10,7 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Define the secret key (should be kept secret)
-SECRET_KEY="beny"
+# SECRET_KEY="beny"
 EXPIRY_DATE="2025-03-31"  # Set the expiration date (YYYY-MM-DD)
 
 # Get current date
@@ -30,21 +30,9 @@ remaining_seconds=$((expiry_seconds - current_seconds))
 # Convert remaining seconds to days
 remaining_days=$((remaining_seconds / 86400))
 
-# Ask for the secret key before proceeding
-echo -e "${MAGENTA} ┌────────────────────────────────────────────────────────────────────────────────────────┐ ${NC}"
-echo -e "${MAGENTA} │${NC}             ${CYAN}Please enter your secret key to unlock the script${NC}            ${MAGENTA}│ ${NC}"
-echo -e "${MAGENTA} └────────────────────────────────────────────────────────────────────────────────────────┘ ${NC}"
+# Bagian perintah untuk input dan pemeriksaan key telah dihapus
 
-read -sp "Enter the key: " input_key
-echo
-
-# Check if the key matches
-if [ "$input_key" != "$SECRET_KEY" ]; then
-    echo -e "${RED}Invalid key. Access denied.${NC}"
-    exit 1
-fi
-
-# If the key is correct, proceed with showing the server information
+# Menampilkan informasi server
 echo -e "${MAGENTA} ┌────────────────────────────────────────────────────────────────────────────────────────┐ ${NC}"
 echo -e "${MAGENTA} │${NC}              ${YELLOW}Server Information${NC}                ${MAGENTA}│ ${NC}"
 echo -e "${MAGENTA} ├────────────────────────────────────────────────────────────────────────────────────────┤ ${NC}"
