@@ -14,19 +14,16 @@ EXPIRY_DATE="2025-03-31"  # Set the expiration date (YYYY-MM-DD)
 # Get current date
 current_date=$(date +%Y-%m-%d)
 
-# Check if the current date is before the expiration date
 if [[ "$current_date" > "$EXPIRY_DATE" ]]; then
     echo -e "${RED}The script has expired. Please contact the administrator.${NC}"
     exit 1
 fi
 
-# Calculate the time remaining until expiration
 expiry_seconds=$(date -d "$EXPIRY_DATE" +%s)
 current_seconds=$(date +%s)
 remaining_seconds=$((expiry_seconds - current_seconds))
 remaining_days=$((remaining_seconds / 86400))
 
-# Menampilkan informasi server
 echo -e "${MAGENTA} ┌────────────────────────────────────────────────────────────────────────────────────────┐ ${NC}"
 echo -e "${MAGENTA} │${NC}              ${YELLOW}Server Information${NC}                ${MAGENTA}│ ${NC}"
 echo -e "${MAGENTA} ├────────────────────────────────────────────────────────────────────────────────────────┤ ${NC}"
@@ -37,7 +34,6 @@ echo -e "${MAGENTA} │${NC} ${CYAN}Provider      : DigitalOcean${NC}           
 echo -e "${MAGENTA} │${NC} ${CYAN}Expiry In     : ${remaining_days} days remaining${NC}               ${MAGENTA}│ ${NC}"
 echo -e "${MAGENTA} └────────────────────────────────────────────────────────────────────────────────────────┘ ${NC}"
 
-# Select Windows Version
 echo -e "${RED} ┌────────────────────────────────────────────────┐ ${NC}"
 echo -e "${RED} │${NC}         ${CYAN}Select Your Windows Version${NC}           ${RED}│ ${NC}"
 echo -e "${RED} ├────────────────────────────────────────────────┤ ${NC}"
@@ -49,7 +45,13 @@ echo -e "${RED} │${NC} ${CYAN}5) Windows Server 10${NC}                       
 echo -e "${RED} │${NC} ${CYAN}6) Windows Server 11${NC}                              ${RED}│ ${NC}"
 echo -e "${RED} └────────────────────────────────────────────────┘ ${NC}"
 
-read -p "Pilih (1-6): " pilihan
+echo -n "Pilih (1-6): "
+read pilihan
+
+if [[ -z "$pilihan" ]]; then
+    echo -e "${RED}Tidak ada input yang diterima. Pastikan console mendukung input interaktif.${NC}"
+    exit 1
+fi
 
 case $pilihan in
     1)
@@ -85,7 +87,8 @@ esac
 echo -e "${CYAN}Apakah Anda ingin mengatur kata sandi untuk akun Administrator?${NC}"
 echo -e "${CYAN}1) Ya, saya ingin mengatur kata sandi saya sendiri${NC}"
 echo -e "${CYAN}2) Tidak, gunakan kata sandi default${NC}"
-read -p "Pilih (1-2): " set_password
+echo -n "Pilih (1-2): "
+read set_password
 
 if [ "$set_password" -eq 1 ]; then
     read -sp "Masukkan kata sandi untuk akun Administrator: " PASSWORD
